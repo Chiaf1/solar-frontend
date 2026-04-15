@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>
+        {{ block "title" . }}Dashboard{{ end }}
+    </title>
+
+    <script src="/static/js/htmx.min.js"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+    {{ block "content" . }}{{ end }}
+</body>
+</html>
