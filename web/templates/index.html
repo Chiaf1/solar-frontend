@@ -11,7 +11,12 @@
                 {{ .ChartTodayJSON }}
             </script>
         </div>
-        <div class="box box-yesterday">IERI</div>
+        <div class="box box-yesterday">
+            <canvas id="chart-yesterday"></canvas>
+            <script id="chart-yesterday-data" type="application/json">
+                {{ .ChartYesterdayJSON }}
+            </script>
+        </div>
     </div>
     
     <div class="right-column">

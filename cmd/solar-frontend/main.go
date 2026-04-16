@@ -15,7 +15,7 @@ type ChartData struct {
 
 func main() {
 
-	data := ChartData{
+	todayData := ChartData{
 		Labels: []string{
 			"00:00", "02:00", "04:00", "06:00",
 			"08:00", "10:00", "12:00", "14:00",
@@ -27,7 +27,21 @@ func main() {
 			2.6, 1.1, 0.3, 0,
 		},
 	}
-	jsonData, _ := json.Marshal(data)
+	todayJSON, _ := json.Marshal(todayData)
+
+	yesterdayData := ChartData{
+		Labels: []string{
+			"00:00", "02:00", "04:00", "06:00",
+			"08:00", "10:00", "12:00", "14:00",
+			"16:00", "18:00", "20:00", "22:00",
+		},
+		Values: []float64{
+			0, 0, 0, 0.3,
+			1.0, 2.4, 3.6, 3.2,
+			2.0, 0.9, 0.2, 0,
+		},
+	}
+	yesterdayJSON, _ := json.Marshal(yesterdayData)
 
 	r := gin.Default()
 
@@ -37,8 +51,9 @@ func main() {
 	r.GET("/", func(ctx *gin.Context) {
 		now := time.Now()
 		ctx.HTML(200, "index.html", gin.H{
-			// Dati per grafico
-			"ChartTodayJSON": template.JS(jsonData),
+			// Dati per grafici
+			"ChartTodayJSON":     template.JS(todayJSON),
+			"ChartYesterdayJSON": template.JS(yesterdayJSON),
 
 			// Data e ora
 			"DayName":  now.Weekday().String(),

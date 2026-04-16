@@ -1,17 +1,24 @@
-const canvasToday = document.getElementById("chart-today");
-const rawData = document.getElementById("chart-today-data");
 
-if (canvasToday && rawData) {
-    const chartData = JSON.parse(rawData.textContent);
+function createLineChart(canvasId, jsonId, label) {
+    
+    const canvas = document.getElementById(canvasId);
+    const rawData = document.getElementById(jsonId);
+    
+    if (!canvas || !rawData) {
+        console.warn(`Grafico ${canvasId} non inizializzato`);
+        return;
+    }
 
-    new Chart(canvasToday, {
+    const data = JSON.parse(rawData.textContent);
+
+    new Chart(canvas, {
         type: "line",
         data: {
-            labels: chartData.labels,
+            labels: data.labels,
             datasets: [
                 {
-                    label: "Produzione oggi",
-                    data: chartData.values,
+                    label: label,
+                    data: data.values,
                     borderColor: "#f4b400",
                     backgroundColor: "rgba(244, 180, 0, 0.2)",
                     tension: 0.3
@@ -28,4 +35,17 @@ if (canvasToday && rawData) {
             }
         }
     });
+
 }
+
+createLineChart(
+    "chart-today",
+    "chart-today-data",
+    "Produzione oggi",
+);
+
+createLineChart(
+    "chart-yesterday",
+    "chart-yesterday-data",
+    "Produzione ieri",
+);
