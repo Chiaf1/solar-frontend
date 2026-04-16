@@ -22,8 +22,24 @@
                 <button class="hamburger" arial-label="menu">☰</button>
             </div>
         </div>
-        <div class="box production">PRODUZIONE</div>
-        <div class="box consumption">CONSUMO</div>
+        <div class="box production">
+            <div class="kpi">
+                <div class="kpi-label">Produzione attuale</div>
+                <div class="kpi-value">
+                    {{ .ProductionValue }}
+                    <span class="kpi-unit">{{ .ProductionUnit }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="box consumption">
+            <div class="kpi">
+                <div class="kpi-label">Consumo attuale</div>
+                <div class="kpi-value">
+                    {{ .ConsumptionValue }}
+                    <span class="kpi-unit">{{ .ConsumptionUnit }}</span>
+                </div>
+            </div>
+        </div>
         
         <div class="box small-charts-top">-2 | -3</div>
         <div class="box small-charts-bottom">-4 | -5 | -6</div>

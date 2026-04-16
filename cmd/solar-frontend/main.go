@@ -19,6 +19,12 @@ func main() {
 			"DayName":  now.Weekday().String(),
 			"FullDate": now.Format("02 January 2006"),
 			"Time":     now.Format("15:04"),
+
+			// KPI finti
+			"ProductionValue":  3.42,
+			"ProductionUnit":   "kW",
+			"ConsumptionValue": 1.87,
+			"ConsumptionUnit":  "kW",
 		})
 	})
 
