@@ -1,28 +1,42 @@
-const ctx = document.getElementById("chart-today");
+const canvasToday = document.getElementById("chart-today");
 
-if (ctx) {
-  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["00:00", "02:00", "04:00", "06:00", "08:00", "10:00"],
-      datasets: [
-        {
-          label: "Produzione",
-          data: [0, 0, 1.2, 3.5, 5.8, 6.1],
-          borderColor: "rgb(75, 192, 192)",
-          tension: 0.3
+if (!canvasToday) {
+    console.warn("Canvas chart-today non trovato");
+} else {
+    const labels = [
+        "00:00", "02:00", "04:00", "06:00",
+        "08:00", "10:00", "12:00", "14:00",
+        "16:00", "18:00", "20:00", "22:00",
+    ];
+
+    const productionData = [
+        0, 0, 0, 0.5,
+        1.2, 2.8, 4.1, 3.9,
+        2.6, 1.1, 0.3, 0,
+    ];
+
+    new Chart(canvasToday, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Produzione oggi",
+                    data: productionData,
+                    borderColor: "#f4b400",
+                    backgroundColor: "rgba(244, 180, 0, 0.2)",
+                    tension: 0.3
+                }
+            ]
         },
-        {
-          label: "Consumo",
-          data: [0.8, 0.9, 1.1, 1.6, 2.0, 2.4],
-          borderColor: "rgb(255, 99, 132)",
-          tension: 0.3
+        options: {
+            responsive: true,
+            mantainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZerto: true
+                }
+            }
         }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
+    });
 }
