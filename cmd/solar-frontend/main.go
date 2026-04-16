@@ -15,15 +15,10 @@ func main() {
 
 	r.GET("/", func(ctx *gin.Context) {
 		now := time.Now()
-
-		dayName := now.Weekday().String()
-		date := now.Format("02 january 2006")
-		timerStr := now.Format("15:04:05")
-
-		ctx.HTML(200, "base.html", gin.H{
-			"DayName":  dayName,
-			"FullDate": date,
-			"Time":     timerStr,
+		ctx.HTML(200, "index.html", gin.H{
+			"DayName":  now.Weekday().String(),
+			"FullDate": now.Format("02 January 2006"),
+			"Time":     now.Format("15:04"),
 		})
 	})
 

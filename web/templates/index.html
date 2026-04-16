@@ -1,20 +1,33 @@
+{{ template "base.html" . }}
+
 {{ define "title" }}Dashboard FV {{ end }}
 
 {{ define "content" }}
 <div class="dashboard">
     <div class="left-column">
-        <div class="box box-today">OGGI</div>
+        <div class="box box-today">
+            <canvas id="chart-today"></canvas>
+        </div>
         <div class="box box-yesterday">IERI</div>
     </div>
     
     <div class="right-column">
-        <div class="box header">HEADER</div>
+        <div class="box header">
+            <div class="header-left">
+                <div class="day">{{ .DayName}}</div>
+                <div class="date">{{ .FullDate}}</div>
+            </div>
+            <div class="header-right">
+                <div class="time">{{ .Time}}</div>
+                <button class="hamburger" arial-label="menu">☰</button>
+            </div>
+        </div>
         <div class="box production">PRODUZIONE</div>
         <div class="box consumption">CONSUMO</div>
         
         <div class="box small-charts-top">-2 | -3</div>
         <div class="box small-charts-bottom">-4 | -5 | -6</div>
     </div>
-    
+
 </div>
 {{ end }}
