@@ -14,7 +14,8 @@ type ChartData struct {
 }
 
 func main() {
-
+	// Dati finti per grafici
+	// Grafico oggi
 	todayData := ChartData{
 		Labels: []string{
 			"00:00", "02:00", "04:00", "06:00",
@@ -24,11 +25,12 @@ func main() {
 		Values: []float64{
 			0, 0, 0, 0.5,
 			1.2, 2.8, 4.1, 3.9,
-			2.6, 1.1, 0.3, 0,
+			2.6, 1.1, 0.3, 1,
 		},
 	}
 	todayJSON, _ := json.Marshal(todayData)
 
+	//Grafico ieri
 	yesterdayData := ChartData{
 		Labels: []string{
 			"00:00", "02:00", "04:00", "06:00",
@@ -43,6 +45,13 @@ func main() {
 	}
 	yesterdayJSON, _ := json.Marshal(yesterdayData)
 
+	// Estrapolazione KPI da dati di oggi
+	currentProduction := 0.0
+	if len(todayData.Values) > 0 {
+		currentProduction = todayData.Values[len(todayData.Values)-1]
+	}
+
+	// Creazione router gin
 	r := gin.Default()
 
 	r.LoadHTMLGlob("web/templates/*.html")
@@ -61,7 +70,7 @@ func main() {
 			"Time":     now.Format("15:04"),
 
 			// KPI finti
-			"ProductionValue":  3.42,
+			"ProductionValue":  currentProduction,
 			"ProductionUnit":   "kW",
 			"ConsumptionValue": 1.87,
 			"ConsumptionUnit":  "kW",
