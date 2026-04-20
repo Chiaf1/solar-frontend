@@ -54,7 +54,16 @@ func main() {
 	// Creazione router gin
 	r := gin.Default()
 
-	r.LoadHTMLGlob("web/templates/*.html")
+	//r.LoadHTMLGlob("web/templates/*")
+	r.LoadHTMLFiles(
+		"web/templates/base.html",
+		"web/templates/index.html",
+		"web/templates/partials/chart_today.html",
+		"web/templates/partials/chart_yesterday.html",
+		"web/templates/partials/header.html",
+		"web/templates/partials/kpi_production.html",
+		"web/templates/partials/kpi_consumption.html",
+	)
 	r.Static("/static", "./web/static")
 
 	r.GET("/", func(ctx *gin.Context) {

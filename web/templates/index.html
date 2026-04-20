@@ -6,49 +6,17 @@
 <div class="dashboard">
     <div class="left-column">
         <div class="box box-today">
-            <canvas id="chart-today"></canvas>
-            <script id="chart-today-data" type="application/json">
-                {{ .ChartTodayJSON }}
-            </script>
+            {{ template "partials/chart_today" . }}
         </div>
         <div class="box box-yesterday">
-            <canvas id="chart-yesterday"></canvas>
-            <script id="chart-yesterday-data" type="application/json">
-                {{ .ChartYesterdayJSON }}
-            </script>
+            {{ template "partials/chart_yesterday" . }}
         </div>
     </div>
     
     <div class="right-column">
-        <div class="box header">
-            <div class="header-left">
-                <div class="day">{{ .DayName}}</div>
-                <div class="date">{{ .FullDate}}</div>
-            </div>
-            <div class="header-right">
-                <div class="time">{{ .Time}}</div>
-                <button class="hamburger" arial-label="menu">☰</button>
-            </div>
-        </div>
-        <div class="box production">
-            <div class="kpi">
-                <div class="kpi-label">Produzione attuale</div>
-                <div class="kpi-value">
-                    {{ .ProductionValue }}
-                    <span class="kpi-unit">{{ .ProductionUnit }}</span>
-                </div>
-            </div>
-        </div>
-        <div class="box consumption">
-            <div class="kpi">
-                <div class="kpi-label">Consumo attuale</div>
-                <div class="kpi-value">
-                    {{ .ConsumptionValue }}
-                    <span class="kpi-unit">{{ .ConsumptionUnit }}</span>
-                </div>
-            </div>
-        </div>
-        
+        {{ template "partials/header" . }}
+        {{ template "partials/kpi_production" . }}
+        {{ template "partials/kpi_consumption" . }}        
         <div class="box small-charts-top">-2 | -3</div>
         <div class="box small-charts-bottom">-4 | -5 | -6</div>
     </div>

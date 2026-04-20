@@ -1,0 +1,11 @@
+{{ define "partials/kpi_consumption" }}
+<div class="box consumption">
+    <div class="kpi">
+        <div class="kpi-label">Consumo attuale</div>
+        <div class="kpi-value">
+            {{ .ConsumptionValue }}
+            <span class="kpi-unit">{{ .ConsumptionUnit }}</span>
+        </div>
+    </div>
+</div>
+{{ end }}

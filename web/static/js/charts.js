@@ -27,10 +27,10 @@ function createLineChart(canvasId, jsonId, label) {
         },
         options: {
             responsive: true,
-            mantainAspectRatio: false,
+            maintainAspectRatio: false,
             scales: {
                 y: {
-                    beginAtZerto: true
+                    beginAtZero: true
                 }
             }
         }
