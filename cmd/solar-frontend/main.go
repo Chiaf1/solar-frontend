@@ -63,6 +63,7 @@ func main() {
 		"web/templates/partials/header.html",
 		"web/templates/partials/kpi_production.html",
 		"web/templates/partials/kpi_consumption.html",
+		"web/templates/partials/today.html",
 	)
 	r.Static("/static", "./web/static")
 
@@ -79,6 +80,16 @@ func main() {
 			"Time":     now.Format("15:04"),
 
 			// KPI finti
+			"ProductionValue":  currentProduction,
+			"ProductionUnit":   "kW",
+			"ConsumptionValue": 1.87,
+			"ConsumptionUnit":  "kW",
+		})
+	})
+
+	r.GET("/partials/today", func(ctx *gin.Context) {
+		ctx.HTML(200, "sections/today", gin.H{
+			"ChartTodayJSON":   template.JS(todayJSON),
 			"ProductionValue":  currentProduction,
 			"ProductionUnit":   "kW",
 			"ConsumptionValue": 1.87,
