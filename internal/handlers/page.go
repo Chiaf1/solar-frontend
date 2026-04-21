@@ -22,7 +22,7 @@ func DashboardPage(ctx *gin.Context) {
 	// Json conversion
 	todayJSON, _ := json.Marshal(todayChart)
 	historyChartsJSON := make(map[string][]byte)
-	for k, _ := range historyCharts {
+	for k := range historyCharts {
 		historyChartsJSON[k], _ = json.Marshal(historyCharts[k])
 	}
 
