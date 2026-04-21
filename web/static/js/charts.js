@@ -64,3 +64,7 @@ document.addEventListener("DOMContentLoaded", initCharts);
 document.body.addEventListener("updateChartToday", evt => {
     updateChart("chart-today", evt.detail);
 })
+
+document.body.addEventListener("updateChartYesterday", evt => {
+    updateChart("chart-yesterday", evt.detail);
+})
