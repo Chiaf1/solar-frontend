@@ -63,6 +63,7 @@ func main() {
 		"web/templates/partials/header.html",
 		"web/templates/partials/kpi_production.html",
 		"web/templates/partials/kpi_consumption.html",
+		"web/templates/partials/kpis.html",
 		"web/templates/partials/chart_minus_2.html",
 		"web/templates/partials/chart_minus_3.html",
 		"web/templates/partials/chart_minus_4.html",
@@ -178,6 +179,30 @@ func main() {
 		ctx.Header("HX-Trigger", string(payloadJSON))
 
 		ctx.Status(204)
+	})
+
+	// Endpoint for date and time update
+	r.GET("/partials/header", func(ctx *gin.Context) {
+		now := time.Now()
+
+		ctx.HTML(200, "partials/header", gin.H{
+			"DayName":  now.Weekday().String(),
+			"FullDate": now.Format("02 January 2006"),
+			"Time":     now.Format("15:04"),
+		})
+	})
+
+	// Endpoint for KPIs update
+	r.GET("/partials/kpis", func(ctx *gin.Context) {
+		currentProduction += 1
+		ctx.HTML(200, "partials/kpis", gin.H{
+			// Production
+			"ProductionValue": currentProduction,
+			"ProductionUnit":  "kW",
+			// Consumption
+			"ConsumptionValue": 1.50,
+			"ConsumptionUnit":  "kW",
+		})
 	})
 
 	r.Run(":8080")

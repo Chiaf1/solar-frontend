@@ -1,0 +1,9 @@
+{{ define "partials/kpis" }}
+<div class="kpi-container"
+     hx-get="/partials/kpis"
+     hx-trigger="every 10s"
+     hx-swap="outerHTML">
+     {{ template "partials/kpi_production" . }}
+     {{ template "partials/kpi_consumption" . }}
+</div>
+{{ end }}

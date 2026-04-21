@@ -1,9 +1,14 @@
 {{ define "partials/header" }}
-<div class="box header">
+<div class="box header"
+     hx-get="/partials/header"
+     hx-trigger="every 30s"
+     hx-swap="outerHTML">
+
     <div class="header-left">
         <div class="day">{{ .DayName}}</div>
         <div class="date">{{ .FullDate}}</div>
     </div>
+    
     <div class="header-right">
         <div class="time">{{ .Time}}</div>
         <button class="hamburger" arial-label="menu">☰</button>
