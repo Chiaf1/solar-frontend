@@ -63,7 +63,6 @@ func main() {
 		"web/templates/partials/header.html",
 		"web/templates/partials/kpi_production.html",
 		"web/templates/partials/kpi_consumption.html",
-		"web/templates/partials/today.html",
 	)
 	r.Static("/static", "./web/static")
 
@@ -88,13 +87,28 @@ func main() {
 	})
 
 	r.GET("/partials/today", func(ctx *gin.Context) {
-		ctx.HTML(200, "sections/today", gin.H{
-			"ChartTodayJSON":   template.JS(todayJSON),
-			"ProductionValue":  currentProduction,
-			"ProductionUnit":   "kW",
-			"ConsumptionValue": 1.87,
-			"ConsumptionUnit":  "kW",
+		ctx.HTML(200, "partials/chart_today", gin.H{
+			"ChartTodayJSON": template.JS(todayJSON),
 		})
+	})
+
+	r.GET("/api/refresh-today", func(ctx *gin.Context) {
+		// Recupera i dati aggiornati
+		newData := ChartData{
+			Labels: []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
+			Values: []float64{0.1, 0.2, 1.5, 4.2, 2.1, 0.5},
+		}
+
+		// Prepara il payload per HTMX
+		payload := map[string]interface{}{
+			"updateChartToday": newData,
+		}
+		payloadJSON, _ := json.Marshal(payload)
+
+		// Invia i dati tramite header (HTMX li intercetterà)
+		ctx.Header("HX-Trigger", string(payloadJSON))
+
+		ctx.Status(204)
 	})
 
 	r.Run(":8080")

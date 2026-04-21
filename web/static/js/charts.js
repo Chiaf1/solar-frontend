@@ -1,3 +1,5 @@
+// Mappa contentenente le istanze dei vari chart creati
+const chartInstances = {}
 
 function createLineChart(canvasId, jsonId, label) {
     
@@ -11,7 +13,12 @@ function createLineChart(canvasId, jsonId, label) {
 
     const data = JSON.parse(rawData.textContent);
 
-    new Chart(canvas, {
+    // Distruzione chart vecchio se già esistente
+    if (chartInstances[canvasId]) {
+        chartInstances[canvasId].destroy();
+    }
+
+    chartInstances[canvasId] = new Chart(canvas, {
         type: "line",
         data: {
             labels: data.labels,
@@ -28,24 +35,32 @@ function createLineChart(canvasId, jsonId, label) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+            animation: false
         }
     });
 
+} 
+
+// Helper function to initialize charts
+function initCharts() {
+    createLineChart("chart-today", "chart-today-data", "Produzione oggi");
+    createLineChart("chart-yesterday", "chart-yesterday-data", "Produzione ieri");
 }
 
-createLineChart(
-    "chart-today",
-    "chart-today-data",
-    "Produzione oggi",
-);
+// Helper function to update charts data
+function updateChart( chartId, newData) {
+    const chart = chartInstances[chartId];
+    if (!chart) return;
 
-createLineChart(
-    "chart-yesterday",
-    "chart-yesterday-data",
-    "Produzione ieri",
-);
+    chart.data.labels = newData.labels;
+    chart.data.datasets[0].data = newData.values;
+    chart.update('none');
+}
+
+// Inizializzazione al primo caricamento
+document.addEventListener("DOMContentLoaded", initCharts);
+
+// Ascolto per l'evento creato dalla chiamata htmx per aggiornare solo i dati del grafico today
+document.body.addEventListener("updateChartToday", evt => {
+    updateChart("chart-today", evt.detail);
+})

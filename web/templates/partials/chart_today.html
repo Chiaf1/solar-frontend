@@ -1,5 +1,9 @@
 {{ define "partials/chart_today" }}
-<canvas id="chart-today"></canvas>
+<div hx-get="/api/refresh-today"
+     hx-trigger="every 10s"
+     hx-swap="none">
+     <canvas id="chart-today"></canvas>
+</div>
 <script id="chart-today-data" type="application/json">
     {{ .ChartTodayJSON }}
 </script>
