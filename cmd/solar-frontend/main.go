@@ -5,11 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ChartData struct {
-	Labels []string  `json:"labels"`
-	Values []float64 `json:"values"`
-}
-
 func main() {
 	// Creazione router gin
 	r := gin.Default()
