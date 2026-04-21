@@ -1,5 +1,5 @@
 {{ define "partials/chart_yesterday" }}
-<div hx-get="/api/refresh-yesterday"
+<div hx-get="/api/refresh-history"
      hx-trigger="every 10s"
      hx-swap="none">
     <canvas id="chart-yesterday"></canvas>

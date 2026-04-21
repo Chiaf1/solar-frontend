@@ -63,15 +63,27 @@ func main() {
 		"web/templates/partials/header.html",
 		"web/templates/partials/kpi_production.html",
 		"web/templates/partials/kpi_consumption.html",
+		"web/templates/partials/chart_minus_2.html",
+		"web/templates/partials/chart_minus_3.html",
+		"web/templates/partials/chart_minus_4.html",
+		"web/templates/partials/chart_minus_5.html",
+		"web/templates/partials/chart_minus_6.html",
 	)
 	r.Static("/static", "./web/static")
 
+	// Endpoint pagina principale
 	r.GET("/", func(ctx *gin.Context) {
 		now := time.Now()
 		ctx.HTML(200, "index.html", gin.H{
 			// Dati per grafici
 			"ChartTodayJSON":     template.JS(todayJSON),
 			"ChartYesterdayJSON": template.JS(yesterdayJSON),
+			"ChartMinus2JSON":    template.JS(yesterdayJSON),
+			"ChartMinus3JSON":    template.JS(yesterdayJSON),
+			"ChartMinus4JSON":    template.JS(yesterdayJSON),
+			"ChartMinus5JSON":    template.JS(yesterdayJSON),
+			"ChartMinus6JSON":    template.JS(yesterdayJSON),
+			"ChartMinus7JSON":    template.JS(yesterdayJSON),
 
 			// Data e ora
 			"DayName":  now.Weekday().String(),
@@ -86,6 +98,7 @@ func main() {
 		})
 	})
 
+	// Endpoint per refresh grafico oggi
 	r.GET("/api/refresh-today", func(ctx *gin.Context) {
 		// Recupera i dati aggiornati
 		newData := ChartData{
@@ -105,6 +118,7 @@ func main() {
 		ctx.Status(204)
 	})
 
+	// Endpoint per regresh grafico ieri
 	r.GET("/api/refresh-yesterday", func(ctx *gin.Context) {
 		// Recupera i dati aggiornati
 		newData := ChartData{
@@ -115,6 +129,48 @@ func main() {
 		// Prepara il payload per HTMX
 		payload := map[string]interface{}{
 			"updateChartYesterday": newData,
+		}
+		payloadJSON, _ := json.Marshal(payload)
+
+		// Invia i dati tramite header (HTMX li intercetterà)
+		ctx.Header("HX-Trigger", string(payloadJSON))
+
+		ctx.Status(204)
+	})
+
+	// Endpoint per refrash grafici history ovvero da ieri fino a -6
+	r.GET("/api/refresh-history", func(ctx *gin.Context) {
+		// Recupera i dati aggiornati
+		hystoryData := map[string]ChartData{
+			"chart-yesterday": {
+				Labels: []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
+				Values: []float64{0.5, 1.2, 2.3, 1.8, 0.9, 0.3},
+			},
+			"chart-minus-2": {
+				Labels: []string{"00:00", "06:00", "12:00", "18:00"},
+				Values: []float64{0.2, 1.1, 2.0, 0.8},
+			},
+			"chart-minus-3": {
+				Labels: []string{"00:00", "06:00", "12:00", "18:00"},
+				Values: []float64{0, 0.9, 1.7, 0.4},
+			},
+			"chart-minus-4": {
+				Labels: []string{"00:00", "06:00", "12:00", "18:00"},
+				Values: []float64{0, 0.9, 1.7, 0.4},
+			},
+			"chart-minus-5": {
+				Labels: []string{"00:00", "06:00", "12:00", "18:00"},
+				Values: []float64{0, 0.9, 1.7, 0.4},
+			},
+			"chart-minus-6": {
+				Labels: []string{"00:00", "06:00", "12:00", "18:00"},
+				Values: []float64{0, 0.9, 1.7, 0.4},
+			},
+		}
+
+		// Prepara il payload per HTMX
+		payload := map[string]any{
+			"updateChartHistory": hystoryData,
 		}
 		payloadJSON, _ := json.Marshal(payload)
 

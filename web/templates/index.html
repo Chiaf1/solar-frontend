@@ -17,8 +17,15 @@
         {{ template "partials/header" . }}
         {{ template "partials/kpi_production" . }}
         {{ template "partials/kpi_consumption" . }}        
-        <div class="box small-charts-top">-2 | -3</div>
-        <div class="box small-charts-bottom">-4 | -5 | -6</div>
+        <div class="box small-charts-top">
+            {{ template "partials/chart_minus_2" . }}
+            {{ template "partials/chart_minus_3" . }}
+        </div>
+        <div class="box small-charts-bottom">
+            {{ template "partials/chart_minus_4" . }}
+            {{ template "partials/chart_minus_5" . }}
+            {{ template "partials/chart_minus_6" . }}
+        </div>
     </div>
 
 </div>

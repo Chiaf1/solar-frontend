@@ -45,6 +45,11 @@ function createLineChart(canvasId, jsonId, label) {
 function initCharts() {
     createLineChart("chart-today", "chart-today-data", "Produzione oggi");
     createLineChart("chart-yesterday", "chart-yesterday-data", "Produzione ieri");
+    createLineChart("chart-minus-2", "chart-minus-2-data", "Produzione -2");
+    createLineChart("chart-minus-3", "chart-minus-3-data", "Produzione -3");
+    createLineChart("chart-minus-4", "chart-minus-4-data", "Produzione -4");
+    createLineChart("chart-minus-5", "chart-minus-5-data", "Produzione -5");
+    createLineChart("chart-minus-6", "chart-minus-6-data", "Produzione -6");
 }
 
 // Helper function to update charts data
@@ -67,4 +72,11 @@ document.body.addEventListener("updateChartToday", evt => {
 
 document.body.addEventListener("updateChartYesterday", evt => {
     updateChart("chart-yesterday", evt.detail);
+})
+
+document.body.addEventListener("updateChartHistory", evt => {
+    const updates = evt.detail;
+    Object.entries(updates).forEach(([chartId, data]) => {
+        updateChart(chartId, data);
+    });
 })
