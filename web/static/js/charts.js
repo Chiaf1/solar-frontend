@@ -1,7 +1,7 @@
 // Mappa contentenente le istanze dei vari chart creati
 const chartInstances = {}
 
-function createLineChart(canvasId, jsonId, label) {
+function createLineChart(canvasId, jsonId, labelPrefix) {
     
     const canvas = document.getElementById(canvasId);
     const rawData = document.getElementById(jsonId);
@@ -24,10 +24,17 @@ function createLineChart(canvasId, jsonId, label) {
             labels: data.labels,
             datasets: [
                 {
-                    label: label,
-                    data: data.values,
+                    label: `${labelPrefix} - Produzione`,
+                    data: data.production,
                     borderColor: "#f4b400",
                     backgroundColor: "rgba(244, 180, 0, 0.2)",
+                    tension: 0.3
+                },
+                {
+                    label: `${labelPrefix} - Consumo`,
+                    data: data.consumption,
+                    borderColor: "#4285f4",
+                    backgroundColor: "rgba(66, 133, 244, 0.2)",
                     tension: 0.3
                 }
             ]
@@ -35,7 +42,16 @@ function createLineChart(canvasId, jsonId, label) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: false
+            animation: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "KW"
+                    }
+                }
+            }
         }
     });
 
@@ -58,7 +74,8 @@ function updateChart( chartId, newData) {
     if (!chart) return;
 
     chart.data.labels = newData.labels;
-    chart.data.datasets[0].data = newData.values;
+    chart.data.datasets[0].data = newData.production;
+    chart.data.datasets[1].data = newData.consumption;
     chart.update('none');
 }
 

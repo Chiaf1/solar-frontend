@@ -1,8 +1,15 @@
 package models
 
 type ChartData struct {
-	Labels []string  `json:"labels"`
-	Values []float64 `json:"values"`
+	Labels      []string  `json:"labels"`
+	Production  []float64 `json:"production"`
+	Consumption []float64 `json:"consumption"`
+}
+
+type ChartPoint struct {
+	Timestamp   string
+	Production  float64
+	Consumption float64
 }
 
 type KPIData struct {

@@ -10,10 +10,15 @@ func GetTodayChart() models.ChartData {
 			"08:00", "10:00", "12:00", "14:00",
 			"16:00", "18:00", "20:00", "22:00",
 		},
-		Values: []float64{
+		Production: []float64{
 			0, 0, 0, 0.5,
 			1.2, 2.8, 4.1, 3.9,
 			2.6, 1.1, 0.3, 1,
+		},
+		Consumption: []float64{
+			0.8, 0.7, 0.6, 0.8,
+			1.1, 1.6, 2.0, 2.3,
+			2.1, 1.9, 1.4, 1.0,
 		},
 	}
 	return todayData
@@ -23,28 +28,34 @@ func GetTodayChart() models.ChartData {
 func GetHistoryCharts() map[string]models.ChartData {
 	hystoryData := map[string]models.ChartData{
 		"chart-yesterday": {
-			Labels: []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
-			Values: []float64{0.5, 1.2, 2.3, 1.8, 0.9, 0.3},
+			Labels:      []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
+			Production:  []float64{0.5, 1.2, 2.3, 1.8, 0.9, 0.3},
+			Consumption: []float64{0.5, 1.2, 1.5, 1.0, 1.5, 0.3},
 		},
 		"chart-minus-2": {
-			Labels: []string{"00:00", "06:00", "12:00", "18:00"},
-			Values: []float64{0.2, 1.1, 2.0, 0.8},
+			Labels:      []string{"00:00", "06:00", "12:00", "18:00"},
+			Production:  []float64{0.2, 1.1, 2.0, 0.8},
+			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 		"chart-minus-3": {
-			Labels: []string{"00:00", "06:00", "12:00", "18:00"},
-			Values: []float64{0, 0.9, 1.7, 0.4},
+			Labels:      []string{"00:00", "06:00", "12:00", "18:00"},
+			Production:  []float64{0, 0.9, 1.7, 0.4},
+			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 		"chart-minus-4": {
-			Labels: []string{"00:00", "06:00", "12:00", "18:00"},
-			Values: []float64{0, 0.9, 1.7, 0.4},
+			Labels:      []string{"00:00", "06:00", "12:00", "18:00"},
+			Production:  []float64{0, 0.9, 1.7, 0.4},
+			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 		"chart-minus-5": {
-			Labels: []string{"00:00", "06:00", "12:00", "18:00"},
-			Values: []float64{0, 0.9, 1.7, 0.4},
+			Labels:      []string{"00:00", "06:00", "12:00", "18:00"},
+			Production:  []float64{0, 0.9, 1.7, 0.4},
+			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 		"chart-minus-6": {
-			Labels: []string{"00:00", "06:00", "12:00", "18:00"},
-			Values: []float64{0, 0.9, 1.7, 0.4},
+			Labels:      []string{"00:00", "06:00", "12:00", "18:00"},
+			Production:  []float64{0, 0.9, 1.7, 0.4},
+			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 	}
 	return hystoryData
