@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: system-ui, sans-serif;
   background-color: #f4f4f4;
@@ -11,7 +16,7 @@ body {
 
 .dashboard {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 2fr 1fr;
   height: 100vh;
   gap: 10px;
   padding: 10px;
@@ -19,31 +24,50 @@ body {
 
 .left-column {
   display: grid;
-  grid-template-rows: 3fr 2fr;
+  grid-template-rows: 1fr 1fr;
   gap: 10px;
+  min-height: 0;
 }
 
 .right-column {
   display: grid;
-  grid-template-rows: auto auto auto 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
   gap: 10px;
+  min-height: 0;
 }
 
 .box {
+  min-height: 0;
   background-color: white;
   border-radius: 8px;
   padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
   color: #555;
+  display: flex;
+  flex-direction: column;
+}
+
+.box > div {
+  flex: 1;
+  min-height: 0;
+}
+
+.box canvas {
+  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 8px 12px;
+}
+
+.header-left {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
 }
 
 .header-left .day {
@@ -57,9 +81,9 @@ body {
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .header-right .time {
@@ -67,10 +91,26 @@ body {
     font-weight: bold;
 }
 
+.kpi-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .kpi {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.production {
+  border-left: 4px solid #f4b400;
+}
+
+.consumption {
+  border-left: 4px solid #4285f4;
 }
 
 .kpi-label {
@@ -89,7 +129,26 @@ body {
     color: #555;
 }
 
-.box canvas {
-  width: 100%;
-  height: 100%;
+.small-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 8px;
+  min-height: 0;
 }
+
+.small-charts > div {
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  html, body {
+    overflow: auto;
+  }
+}
+
