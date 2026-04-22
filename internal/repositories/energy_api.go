@@ -55,7 +55,7 @@ func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
 	return mapAPIResponseToChartData(apiResp), err
 }
 
-// Retrive today chart data from api
+// Retrive yesterday chart data from api
 func (r *EnergyAPIRepository) GetYesterday() (models.ChartData, error) {
 	url := fmt.Sprintf("%s/energy/yesterday", r.baseURL)
 
@@ -88,11 +88,77 @@ func (r *EnergyAPIRepository) GetYesterday() (models.ChartData, error) {
 }
 
 func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) {
-	charts := make(map[string]models.ChartData)
+	charts := map[string]models.ChartData{
+		"chart-yesterday": emptyDailyChart(10 * time.Minute),
+		"chart-minus-2":   emptyDailyChart(10 * time.Minute),
+		"chart-minus-3":   emptyDailyChart(10 * time.Minute),
+		"chart-minus-4":   emptyDailyChart(10 * time.Minute),
+		"chart-minus-5":   emptyDailyChart(10 * time.Minute),
+		"chart-minus-6":   emptyDailyChart(10 * time.Minute),
+	}
+	var err error
 	// Yesterday
-	charts["chart-yesterday"], _ = r.GetYesterday()
+	charts["chart-yesterday"], err = r.GetYesterday()
 
-	return charts, nil
+	// Prev week (-2, ..., -6)
+	// Url building
+	window := "10m"
+	loc, _ := time.LoadLocation("Europe/Rome")
+	now := time.Now().In(loc)
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, loc)
+
+	from := today.AddDate(0, 0, -6)
+	to := today.AddDate(0, 0, -2)
+
+	fromStr := from.Format("2006-01-02")
+	toStr := to.Format("2006-01-02")
+
+	url := fmt.Sprintf("%s/energy/daily?from=%s&to=%s&window=%s", r.baseURL, fromStr, toStr, window)
+	// 1. Create the request
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return charts, err
+	}
+	// 2. Execute the request
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return charts, err
+	}
+	defer resp.Body.Close()
+	// 3. Check status code
+	if resp.StatusCode != http.StatusOK {
+		return charts, fmt.Errorf("API returned status %d", resp.StatusCode)
+	}
+	// 4. Decode JSON
+	var apiResp []EnergyAPIDaily
+	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+		return charts, err
+	}
+
+	// Data formatting for chart data map
+	for _, day := range apiResp {
+		chartData := mapAPIResponseToChartData(day.Points)
+
+		key := ""
+		switch day.Day {
+		case from.AddDate(0, 0, 0).Format("2006-01-02"): // from + 0
+			key = "chart-minus-6"
+		case from.AddDate(0, 0, 1).Format("2006-01-02"): // from + 1
+			key = "chart-minus-5"
+		case from.AddDate(0, 0, 2).Format("2006-01-02"):
+			key = "chart-minus-4"
+		case from.AddDate(0, 0, 3).Format("2006-01-02"):
+			key = "chart-minus-3"
+		case from.AddDate(0, 0, 4).Format("2006-01-02"):
+			key = "chart-minus-2"
+		}
+
+		if key != "" {
+			charts[key] = chartData
+		}
+	}
+
+	return charts, err
 }
 
 func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
@@ -130,21 +196,6 @@ func mapAPIResponseToChartData(apiResp []EnergyAPIPoint) models.ChartData {
 		Production:  production,
 		Consumption: consumption,
 	}
-}
-
-// Convert time stamp string into label format
-func formatTimeStamp(ts string) string {
-	t, err := time.Parse(time.RFC3339, ts)
-	if err != nil {
-		return ts
-	}
-	// Load local time zone (Italy)
-	loc, err := time.LoadLocation("Europe/Rome")
-	if err != nil {
-		return t.Format("15:04")
-	}
-	// Conv from UTC to Europe/Rome
-	return t.In(loc).Format("15:04")
 }
 
 // Build daily timeline returns the labels for a comlpete day with a set step
@@ -217,4 +268,26 @@ func normalizeToBacket(ts time.Time, step time.Duration, loc *time.Location) tim
 	bucketIndex := elapsed / step
 
 	return startOfDay.Add(bucketIndex * step)
+}
+
+// Helper function returns empty chart data
+func emptyDailyChart(step time.Duration) models.ChartData {
+	loc, _ := time.LoadLocation("Europe/Rome")
+	timeline := buildDailyTimeline(step, loc)
+
+	labels := make([]string, 0, len(timeline))
+	production := make([]*float64, 0, len(timeline))
+	consumption := make([]*float64, 0, len(timeline))
+
+	for _, t := range timeline {
+		labels = append(labels, t.Format("15:04"))
+		production = append(production, nil)
+		consumption = append(consumption, nil)
+	}
+
+	return models.ChartData{
+		Labels:      labels,
+		Production:  production,
+		Consumption: consumption,
+	}
 }
