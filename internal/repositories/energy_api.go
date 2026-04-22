@@ -55,6 +55,50 @@ func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
 	return mapAPIResponseToChartData(apiResp), err
 }
 
+// Retrive today chart data from api
+func (r *EnergyAPIRepository) GetYesterday() (models.ChartData, error) {
+	url := fmt.Sprintf("%s/energy/yesterday", r.baseURL)
+
+	// 1. Create the request
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return models.ChartData{}, err
+	}
+
+	// 2. Execute the request
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return models.ChartData{}, err
+	}
+	defer resp.Body.Close()
+
+	// 3. Check status code
+	if resp.StatusCode != http.StatusOK {
+		return models.ChartData{}, fmt.Errorf("API returned status %d", resp.StatusCode)
+	}
+
+	// 4. Decode JSON
+	var apiResp []EnergyAPIPoint
+	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+		return models.ChartData{}, err
+	}
+
+	// 5. Mapping to ChartData
+	return mapAPIResponseToChartData(apiResp), err
+}
+
+func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) {
+	charts := make(map[string]models.ChartData)
+	// Yesterday
+	charts["chart-yesterday"], _ = r.GetYesterday()
+
+	return charts, nil
+}
+
+func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
+	return models.KPIData{}, nil
+}
+
 // Convert EnergyAPIPoint slice into chartdata
 func mapAPIResponseToChartData(apiResp []EnergyAPIPoint) models.ChartData {
 	loc, _ := time.LoadLocation("Europe/Rome")
@@ -101,14 +145,6 @@ func formatTimeStamp(ts string) string {
 	}
 	// Conv from UTC to Europe/Rome
 	return t.In(loc).Format("15:04")
-}
-
-func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) {
-	return nil, nil
-}
-
-func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
-	return models.KPIData{}, nil
 }
 
 // Build daily timeline returns the labels for a comlpete day with a set step
