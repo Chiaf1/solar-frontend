@@ -80,7 +80,13 @@ func formatTimeStamp(ts string) string {
 	if err != nil {
 		return ts
 	}
-	return t.Format("15:04")
+	// Load local time zone (Italy)
+	loc, err := time.LoadLocation("Europe/Rome")
+	if err != nil {
+		return t.Format("15:04")
+	}
+	// Conv from UTC to Europe/Rome
+	return t.In(loc).Format("15:04")
 }
 
 func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) {
