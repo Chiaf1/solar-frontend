@@ -26,7 +26,7 @@ func (s *ChartService) GetTodayChart() (models.ChartData, error) {
 
 // Returns chart data for history's charts
 func (s *ChartService) GetHistoryCharts() (map[string]models.ChartData, error) {
-	hystoryData := map[string]models.ChartData{
+	/* hystoryData := map[string]models.ChartData{
 		"chart-yesterday": {
 			Labels:      []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
 			Production:  []float64{0.5, 1.2, 2.3, 1.8, 0.9, 0.3},
@@ -57,6 +57,6 @@ func (s *ChartService) GetHistoryCharts() (map[string]models.ChartData, error) {
 			Production:  []float64{0, 0.9, 1.7, 0.4},
 			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
-	}
-	return hystoryData, nil
+	} */
+	return nil, nil
 }

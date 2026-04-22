@@ -1,9 +1,9 @@
 package models
 
 type ChartData struct {
-	Labels      []string  `json:"labels"`
-	Production  []float64 `json:"production"`
-	Consumption []float64 `json:"consumption"`
+	Labels      []string   `json:"labels"`
+	Production  []*float64 `json:"production"`
+	Consumption []*float64 `json:"consumption"`
 }
 
 type ChartPoint struct {
