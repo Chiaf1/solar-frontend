@@ -3,18 +3,18 @@ package handlers
 import "github.com/gin-gonic/gin"
 
 // Register all page routes
-func RegisterPageRoutes(r *gin.Engine) {
-	r.GET("/", DashboardPage)
+func (h *Handler) RegisterPageRoutes(r *gin.Engine) {
+	r.GET("/", h.DashboardPage)
 }
 
 // Register all API routes
-func RegisterApiRoutes(r *gin.Engine) {
-	r.GET("/api/refresh-today", RefreshToday)
-	r.GET("/api/refresh-history", RefreshHistory)
+func (h *Handler) RegisterApiRoutes(r *gin.Engine) {
+	r.GET("/api/refresh-today", h.RefreshToday)
+	r.GET("/api/refresh-history", h.RefreshHistory)
 }
 
 // Register all partials routes
-func RegisterPartialRoutes(r *gin.Engine) {
+func (h *Handler) RegisterPartialRoutes(r *gin.Engine) {
 	r.GET("/partials/header", HeaderPartial)
-	r.GET("/partials/kpis", KPIsPartial)
+	r.GET("/partials/kpis", h.KPIsPartial)
 }

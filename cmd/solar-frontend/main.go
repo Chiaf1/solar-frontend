@@ -2,10 +2,20 @@ package main
 
 import (
 	"github.com/chiaf1/solar-frontend/internal/handlers"
+	"github.com/chiaf1/solar-frontend/internal/repositories"
+	"github.com/chiaf1/solar-frontend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
+const baseURL = "http://192.168.0.171:8080"
+
 func main() {
+
+	// Creating the repository, service and handler layers to retrive the API data
+	repo := repositories.NewEnergyAPIRepository(baseURL)
+	service := services.NewChartService(repo)
+	handler := handlers.NewHandler(service)
+
 	// Creazione router gin
 	r := gin.Default()
 
@@ -27,9 +37,9 @@ func main() {
 	)
 	r.Static("/static", "./web/static")
 
-	handlers.RegisterPageRoutes(r)
-	handlers.RegisterPartialRoutes(r)
-	handlers.RegisterApiRoutes(r)
+	handler.RegisterPageRoutes(r)
+	handler.RegisterPartialRoutes(r)
+	handler.RegisterApiRoutes(r)
 
 	r.Run(":8080")
 }

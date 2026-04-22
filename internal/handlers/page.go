@@ -6,18 +6,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/chiaf1/solar-frontend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
 // Handler for dashboard page
-func DashboardPage(ctx *gin.Context) {
+func (h *Handler) DashboardPage(ctx *gin.Context) {
 	now := time.Now()
 
 	// Starting data
-	todayChart := services.GetTodayChart()
-	historyCharts := services.GetHistoryCharts()
-	kpis := services.GetKPI()
+	todayChart, _ := h.service.GetTodayChart()
+	historyCharts, _ := h.service.GetHistoryCharts()
+	kpis, _ := h.service.GetKPI()
 
 	// Json conversion
 	todayJSON, _ := json.Marshal(todayChart)

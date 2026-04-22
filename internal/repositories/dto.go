@@ -1,11 +1,9 @@
 package repositories
 
-import "time"
-
 type EnergyAPIPoint struct {
-	Time        time.Time `json:"time"`
-	Production  float64   `json:"production"`
-	Consumption float64   `json:"consumption"`
+	Time        string  `json:"time"`
+	Production  float64 `json:"production"`
+	Consumption float64 `json:"consumption"`
 }
 
 type EnergyAPIDaily struct {

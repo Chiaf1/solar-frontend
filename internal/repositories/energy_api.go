@@ -10,19 +10,20 @@ import (
 )
 
 type EnergyAPIRepository struct {
-	clinet  *http.Client
+	client  *http.Client
 	baseURL string
 }
 
 func NewEnergyAPIRepository(baseURL string) *EnergyAPIRepository {
 	return &EnergyAPIRepository{
-		clinet: &http.Client{
+		client: &http.Client{
 			Timeout: 10 * time.Second,
 		},
 		baseURL: baseURL,
 	}
 }
 
+// Retrive today chart data from api
 func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
 	url := fmt.Sprintf("%s/energy/today", r.baseURL)
 
@@ -33,7 +34,7 @@ func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
 	}
 
 	// 2. Execute the request
-	resp, err := r.clinet.Do(req)
+	resp, err := r.client.Do(req)
 	if err != nil {
 		return models.ChartData{}, err
 	}
@@ -54,4 +55,38 @@ func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
 	return mapAPIResponseToChartData(apiResp), err
 }
 
-func mapAPIResponseToChartData(apiResp []EnergyAPIPoint) models.ChartData
+// Convert EnergyAPIPoint slice into chartdata
+func mapAPIResponseToChartData(apiResp []EnergyAPIPoint) models.ChartData {
+	labels := make([]string, 0, len(apiResp))
+	production := make([]float64, 0, len(apiResp))
+	consumption := make([]float64, 0, len(apiResp))
+
+	for _, point := range apiResp {
+		labels = append(labels, formatTimeStamp(point.Time))
+		production = append(production, point.Production)
+		consumption = append(consumption, point.Consumption)
+	}
+
+	return models.ChartData{
+		Labels:      labels,
+		Production:  production,
+		Consumption: consumption,
+	}
+}
+
+// Convert time stamp string into label format
+func formatTimeStamp(ts string) string {
+	t, err := time.Parse(time.RFC3339, ts)
+	if err != nil {
+		return ts
+	}
+	return t.Format("15:04")
+}
+
+func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) {
+	return nil, nil
+}
+
+func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
+	return models.KPIData{}, nil
+}

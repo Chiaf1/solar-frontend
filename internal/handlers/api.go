@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/chiaf1/solar-frontend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
 // Handler for today chart data refresh
-func RefreshToday(ctx *gin.Context) {
-	data := services.GetTodayChart()
+func (h *Handler) RefreshToday(ctx *gin.Context) {
+	data, _ := h.service.GetTodayChart()
 
 	// Prepara il payload per HTMX
 	payload := map[string]any{
@@ -24,8 +23,8 @@ func RefreshToday(ctx *gin.Context) {
 }
 
 // Handler for history charts data refresh
-func RefreshHistory(ctx *gin.Context) {
-	data := services.GetHistoryCharts()
+func (h *Handler) RefreshHistory(ctx *gin.Context) {
+	data, _ := h.service.GetHistoryCharts()
 	// Prepara il payload per HTMX
 	payload := map[string]any{
 		"updateChartHistory": data,

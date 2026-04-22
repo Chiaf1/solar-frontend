@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/chiaf1/solar-frontend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,8 +19,8 @@ func HeaderPartial(ctx *gin.Context) {
 }
 
 // Handler for KPIs values
-func KPIsPartial(ctx *gin.Context) {
-	data := services.GetKPI()
+func (h *Handler) KPIsPartial(ctx *gin.Context) {
+	data, _ := h.service.GetKPI()
 
 	ctx.HTML(http.StatusOK, "partials/kpis", gin.H{
 		// Production

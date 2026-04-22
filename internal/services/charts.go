@@ -1,31 +1,31 @@
 package services
 
-import "github.com/chiaf1/solar-frontend/internal/models"
+import (
+	"github.com/chiaf1/solar-frontend/internal/models"
+	"github.com/chiaf1/solar-frontend/internal/repositories"
+)
+
+type ChartService struct {
+	repo repositories.EnergyRepository
+}
+
+func NewChartService(repo repositories.EnergyRepository) *ChartService {
+	return &ChartService{
+		repo: repo,
+	}
+}
 
 // Returns chart data for today's chart
-func GetTodayChart() models.ChartData {
-	todayData := models.ChartData{
-		Labels: []string{
-			"00:00", "02:00", "04:00", "06:00",
-			"08:00", "10:00", "12:00", "14:00",
-			"16:00", "18:00", "20:00", "22:00",
-		},
-		Production: []float64{
-			0, 0, 0, 0.5,
-			1.2, 2.8, 4.1, 3.9,
-			2.6, 1.1, 0.3, 1,
-		},
-		Consumption: []float64{
-			0.8, 0.7, 0.6, 0.8,
-			1.1, 1.6, 2.0, 2.3,
-			2.1, 1.9, 1.4, 1.0,
-		},
+func (s *ChartService) GetTodayChart() (models.ChartData, error) {
+	data, err := s.repo.GetToday()
+	if err != nil {
+		return models.ChartData{}, err
 	}
-	return todayData
+	return data, nil
 }
 
 // Returns chart data for history's charts
-func GetHistoryCharts() map[string]models.ChartData {
+func (s *ChartService) GetHistoryCharts() (map[string]models.ChartData, error) {
 	hystoryData := map[string]models.ChartData{
 		"chart-yesterday": {
 			Labels:      []string{"00:00", "04:00", "08:00", "12:00", "16:00", "20:00"},
@@ -58,5 +58,5 @@ func GetHistoryCharts() map[string]models.ChartData {
 			Consumption: []float64{0.2, 5.0, 3.0, 0.8},
 		},
 	}
-	return hystoryData
+	return hystoryData, nil
 }
