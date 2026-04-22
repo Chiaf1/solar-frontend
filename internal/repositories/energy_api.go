@@ -161,6 +161,7 @@ func (r *EnergyAPIRepository) GetHistory() (map[string]models.ChartData, error) 
 	return charts, err
 }
 
+// Currently not used
 func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
 	return models.KPIData{}, nil
 }

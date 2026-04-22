@@ -3,7 +3,7 @@
     <div class="kpi">
         <div class="kpi-label">Produzione attuale</div>
         <div class="kpi-value">
-            {{ .ProductionValue }}
+            {{ if .ProductionValue }}{{ printf "%.2f" .ProductionValue }}{{ else }}---{{ end }}
             <span class="kpi-unit">{{ .ProductionUnit }}</span>
         </div>
     </div>
