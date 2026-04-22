@@ -18,3 +18,33 @@ type KPIData struct {
 	ConsumptionValue float64
 	ConsumptionUnit  string
 }
+
+type DateAndTime struct {
+	DayName string
+	Date    string
+	Time    string
+}
+
+var Giorni = []string{
+	"Domenica",
+	"Lunedì",
+	"Martedì",
+	"Mercoledì",
+	"Giovedì",
+	"Sabato",
+}
+
+var Mesi = []string{
+	"Gennaio",
+	"Febbraio",
+	"Marzo",
+	"Aprile",
+	"Maggio",
+	"Giugno",
+	"Luglio",
+	"Agosto",
+	"Settembre",
+	"Ottobre",
+	"Novembre",
+	"Dicembre",
+}

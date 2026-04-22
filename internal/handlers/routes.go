@@ -15,6 +15,6 @@ func (h *Handler) RegisterApiRoutes(r *gin.Engine) {
 
 // Register all partials routes
 func (h *Handler) RegisterPartialRoutes(r *gin.Engine) {
-	r.GET("/partials/header", HeaderPartial)
+	r.GET("/partials/header", h.HeaderPartial)
 	r.GET("/partials/kpis", h.KPIsPartial)
 }

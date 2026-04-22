@@ -2,19 +2,18 @@ package handlers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Handler for header values
-func HeaderPartial(ctx *gin.Context) {
-	now := time.Now()
+func (h *Handler) HeaderPartial(ctx *gin.Context) {
+	dateAndTime := h.service.GetDateAndTime()
 
 	ctx.HTML(http.StatusOK, "partials/header", gin.H{
-		"DayName":  now.Weekday().String(),
-		"FullDate": now.Format("02 January 2006"),
-		"Time":     now.Format("15:04"),
+		"DayName":  dateAndTime.DayName,
+		"FullDate": dateAndTime.Date,
+		"Time":     dateAndTime.Time,
 	})
 }
 

@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Handler for dashboard page
 func (h *Handler) DashboardPage(ctx *gin.Context) {
-	now := time.Now()
+	dateAndTime := h.service.GetDateAndTime()
 
 	// Starting data
 	todayChart, _ := h.service.GetTodayChart()
@@ -36,9 +35,9 @@ func (h *Handler) DashboardPage(ctx *gin.Context) {
 		"ChartMinus6JSON":    template.JS(historyChartsJSON["chart-minus-6"]),
 
 		// Data e ora
-		"DayName":  now.Weekday().String(),
-		"FullDate": now.Format("02 January 2006"),
-		"Time":     now.Format("15:04"),
+		"DayName":  dateAndTime.DayName,
+		"FullDate": dateAndTime.Date,
+		"Time":     dateAndTime.Time,
 
 		// KPI
 		"ProductionValue":  kpis.ProductionValue,
