@@ -46,3 +46,31 @@ func (h *Handler) DashboardPage(ctx *gin.Context) {
 		"ConsumptionUnit":  kpis.ConsumptionUnit,
 	})
 }
+
+// Handler for today page
+func (h *Handler) TodayPage(ctx *gin.Context) {
+	dateAndTime := h.service.GetDateAndTime()
+
+	// Starting data
+	todayChart, _ := h.service.GetTodayChart()
+	kpis, _ := h.service.GetKPI()
+
+	// Json conversion
+	todayJSON, _ := json.Marshal(todayChart)
+
+	ctx.HTML(http.StatusOK, "today_page.html", gin.H{
+		// Data e ora
+		"DayName":  dateAndTime.DayName,
+		"FullDate": dateAndTime.Date,
+		"Time":     dateAndTime.Time,
+
+		// KPI
+		"ProductionValue":  kpis.ProductionValue,
+		"ProductionUnit":   kpis.ProductionUnit,
+		"ConsumptionValue": kpis.ConsumptionValue,
+		"ConsumptionUnit":  kpis.ConsumptionUnit,
+
+		// Dati per grafico
+		"ChartTodayJSON": template.JS(todayJSON),
+	})
+}

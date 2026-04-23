@@ -1,0 +1,13 @@
+{{ template "base_head_start" . }}
+<title>Dashboard FV - Today</title>
+{{ template "base_head_end" . }}
+
+{{ template "base_body_start" . }}
+<div class="today-page">
+    {{ template "partials/header" . }}
+    {{ template "partials/kpis" . }}
+    <div class="box chart-box box-today">
+        {{ template "partials/chart_today" . }}
+    </div>
+</div>
+{{ template "base_body_end" . }}

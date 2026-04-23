@@ -1,8 +1,8 @@
-{{ template "base.html" . }}
+{{ template "base_head_start" . }}
+<title>Dashboard FV</title>
+{{ template "base_head_end" . }}
 
-{{ define "title" }}Dashboard FV {{ end }}
-
-{{ define "content" }}
+{{ template "base_body_start" . }}
 <div class="dashboard">
     <div class="left-column">
         <div class="box chart-box box-today">
@@ -24,6 +24,6 @@
             {{ template "partials/chart_minus_6" . }}
         </div>
     </div>
-
+    
 </div>
-{{ end }}
+{{ template "base_body_end" . }}

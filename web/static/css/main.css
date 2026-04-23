@@ -152,6 +152,22 @@ body {
   height: 100%;
 }
 
+.today-page {
+  height: 100vh;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  min-height: 0;
+}
+
+.today-page .box.chart-box {
+  flex: 1;
+  min-height: 0;
+}
+
 @media (max-width: 900px) {
   .dashboard {
     grid-template-columns: 1fr;
