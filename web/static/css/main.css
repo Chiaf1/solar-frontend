@@ -173,11 +173,12 @@ body {
   }
 
   .box.chart-box {
-    max-height: 300px;
+    max-height: none;
+    min-height: 260px;
   }
 
   .box.chart-box canvas {
-    max-height: 260px;
+    min-height: 240px;
   }
 
   .kpi-container {
