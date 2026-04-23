@@ -27,9 +27,9 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
                     label: `Produzione`,
                     data: data.production,
                     borderColor: "#34a853",
-                    backgroundColor: "rgba(52, 168, 83, 0.1)",
+                    backgroundColor: "rgba(52, 168, 83, 1)",
                     tension: 0.3,
-                    fill: true
+                    fill: false
                 },
                 {
                     label: `Consumo`,
@@ -62,11 +62,11 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
                     beginAtZero: true,
                     ticks: {
                         font: {
-                            size: 18
+                            size: 20
                         }
                     },
                     title: {
-                        display: true,
+                        display: false,
                         text: "KW",
                         font: {
                             size: 14,

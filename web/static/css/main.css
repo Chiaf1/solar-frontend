@@ -194,12 +194,14 @@ body {
 }
 
 .today-page .header-left .day {
-  font-size: 1.4rem;
-  font-weight: 600;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #222;
 }
 .today-page .header-left .date {
-  font-size: 1.1rem;
-  color: #665;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #222;
 }
 
 .header-right {
@@ -234,6 +236,14 @@ body {
 .today-page .kpi-label {
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+.today-page .production {
+  border: 4px solid #34a853;
+}
+
+.today-page .consumption {
+  border: 4px solid #f4b400;
 }
 
 @media (max-width: 900px) {
@@ -318,11 +328,11 @@ body {
   }
 
   .today-page .header-left .day {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
   }
 
   .today-page .header-left .date {
-    font-size: 1.5rem;
+    font-size: 2.8rem;
   }
 
   .today-page .header-right .time {

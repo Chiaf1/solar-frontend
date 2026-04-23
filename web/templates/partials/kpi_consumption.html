@@ -1,7 +1,7 @@
 {{ define "partials/kpi_consumption" }}
 <div class="box consumption">
     <div class="kpi">
-        <div class="kpi-label">Consumo attuale</div>
+        <div class="kpi-label">Consumo</div>
         <div class="kpi-value">
             {{ if .ConsumptionValue }}{{ printf "%.2f" .ConsumptionValue }}{{ else }}---{{ end }}
             <span class="kpi-unit">{{ .ConsumptionUnit }}</span>
