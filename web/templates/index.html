@@ -5,10 +5,10 @@
 {{ define "content" }}
 <div class="dashboard">
     <div class="left-column">
-        <div class="box box-today">
+        <div class="box chart-box box-today">
             {{ template "partials/chart_today" . }}
         </div>
-        <div class="box box-yesterday">
+        <div class="box chart-box box-yesterday">
             {{ template "partials/chart_yesterday" . }}
         </div>
     </div>
