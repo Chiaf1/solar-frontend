@@ -4,7 +4,7 @@ import "github.com/gin-gonic/gin"
 
 // Register all page routes
 func (h *Handler) RegisterPageRoutes(r *gin.Engine) {
-	r.GET("/", h.DashboardPage)
+	r.GET("/", h.TodayPage)
 	r.GET("/today", h.TodayPage)
 	r.GET("/dashboard", h.DashboardPage)
 }
