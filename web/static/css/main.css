@@ -155,11 +155,41 @@ body {
 @media (max-width: 900px) {
   .dashboard {
     grid-template-columns: 1fr;
+    height: auto;
     overflow-y: auto;
   }
 
+  .left-column {
+    grid-template-rows: auto;
+  }
+
+  .right-column {
+    grid-template-rows: auto;
+  }
+
   html, body {
+    height: auto;
     overflow: auto;
+  }
+
+  .box.chart-box {
+    max-height: 300px;
+  }
+
+  .box.chart-box canvas {
+    max-height: 260px;
+  }
+
+  .kpi-container {
+    grid-template-columns: 1fr;
+  }
+
+  .small-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .small-charts > div:first-of-type {
+    grid-column: auto;
   }
 }
 
