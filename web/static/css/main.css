@@ -56,6 +56,7 @@ body {
   height: 100%;
 }
 
+/*
 .header {
     display: flex;
     justify-content: space-between;
@@ -69,6 +70,7 @@ body {
   align-items: baseline;
 }
 
+*/
 .header-left .day {
     font-size: 1.2rem;
     font-weight: 600;
@@ -105,11 +107,11 @@ body {
 }
 
 .production {
-  border-left: 4px solid #f4b400;
+  border-left: 4px solid #34a853;
 }
 
 .consumption {
-  border-left: 4px solid #4285f4;
+  border-left: 4px solid #f4b400;
 }
 
 .kpi-label {
@@ -168,7 +170,7 @@ body {
   min-height: 0;
 }
 
-.today-page .header {
+.header {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -178,12 +180,12 @@ body {
   min-height: 72px;
 }
 
-.today-page .header-left,
-.today-page .header-right {
+.header-left,
+.header-right {
   flex: 1;
 }
 
-.today-page .header-left {
+.header-left {
   display: flex;
   align-items: baseline;
   gap: 14px;
@@ -200,7 +202,7 @@ body {
   color: #665;
 }
 
-.today-page .header-right {
+.header-right {
   display: flex;
   justify-content: center;
 }
@@ -210,6 +212,28 @@ body {
   font-weight: 700;
   letter-spacing: 1px;
   color: #222;
+}
+
+.today-page .kpi {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.today-page .kpi-label {
+  font-size: 1rem;
+}
+
+.today-page .kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.today-page .kpi-label {
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 @media (max-width: 900px) {
@@ -254,13 +278,54 @@ body {
   }
 
   .today-page .header {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     gap: 6px;
   }
 
+  .today-page .header-left {
+    justify-content: center;
+  }
   .today-page .header-right {
     width: 100%;
     text-align: right;
+    justify-content: center;
+  }
+
+  .today-page .box.chart-box {
+    flex: none;
+    max-height: 320px;
+    min-height: 240px;
   }
 }
 
+@media (min-width: 1600px) {
+  .today-page .header {
+    font-size: 1.2rem;
+  }
+
+  .today-page .kpi-label {
+    font-size: 1.6rem;
+  }
+
+  .today-page .kpi-value {
+    font-size: 2.6rem;
+    font-weight: 700;
+  }
+
+  .today-page .kpi-unit {
+    font-size: 1.3rem;
+  }
+
+  .today-page .header-left .day {
+    font-size: 1.8rem;
+  }
+
+  .today-page .header-left .date {
+    font-size: 1.5rem;
+  }
+
+  .today-page .header-right .time {
+    font-size: 3.6rem;
+  }
+}

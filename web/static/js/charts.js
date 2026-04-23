@@ -24,18 +24,18 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
             labels: data.labels,
             datasets: [
                 {
-                    label: `${labelPrefix} - Produzione`,
+                    label: `Produzione`,
                     data: data.production,
-                    borderColor: "#f4b400",
-                    backgroundColor: "rgba(244, 180, 0, 0.08)",
+                    borderColor: "#34a853",
+                    backgroundColor: "rgba(52, 168, 83, 0.1)",
                     tension: 0.3,
                     fill: true
                 },
                 {
-                    label: `${labelPrefix} - Consumo`,
+                    label: `Consumo`,
                     data: data.consumption,
-                    borderColor: "#4285f4",
-                    backgroundColor: "rgba(66, 133, 244, 0.08)",
+                    borderColor: "#f4b400",
+                    backgroundColor: "rgba(244, 180, 0, 1)",
                     tension: 0.3,
                     fill: false
                 }
@@ -60,9 +60,18 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
             scales: {
                 y: {
                     beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    },
                     title: {
                         display: true,
-                        text: "KW"
+                        text: "KW",
+                        font: {
+                            size: 14,
+                            weight: "500"
+                        }
                     },
                     grid: {
                         color: "#eee"
@@ -71,7 +80,22 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
             },
 
             plugins: {
+                title: {
+                    display : true,
+                    text: labelPrefix,
+                    align: "start",
+                    font: {
+                        size: 16,
+                        weight: "600"
+                    },
+                    padding: {
+                        top: 4,
+                        bottom: 10
+                    }
+                },
                 legend: {
+                    position: "top",
+                    align: "end",
                     labels: {
                         boxWidth: 12,
                         boxHeight: 12
