@@ -22,7 +22,7 @@ func main() {
 	//r.LoadHTMLGlob("web/templates/*")
 	r.LoadHTMLFiles(
 		"web/templates/base.html",
-		"web/templates/index.html",
+		"web/templates/pages/dashboard.html",
 		"web/templates/partials/chart_today.html",
 		"web/templates/partials/chart_yesterday.html",
 		"web/templates/partials/header.html",

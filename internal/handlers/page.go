@@ -24,7 +24,7 @@ func (h *Handler) DashboardPage(ctx *gin.Context) {
 		historyChartsJSON[k], _ = json.Marshal(historyCharts[k])
 	}
 
-	ctx.HTML(http.StatusOK, "index.html", gin.H{
+	ctx.HTML(http.StatusOK, "dashboard.html", gin.H{
 		// Dati per grafici
 		"ChartTodayJSON":     template.JS(todayJSON),
 		"ChartYesterdayJSON": template.JS(historyChartsJSON["chart-yesterday"]),
