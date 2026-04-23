@@ -27,15 +27,17 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
                     label: `${labelPrefix} - Produzione`,
                     data: data.production,
                     borderColor: "#f4b400",
-                    backgroundColor: "rgba(244, 180, 0, 0.2)",
-                    tension: 0.3
+                    backgroundColor: "rgba(244, 180, 0, 0.08)",
+                    tension: 0.3,
+                    fill: true
                 },
                 {
                     label: `${labelPrefix} - Consumo`,
                     data: data.consumption,
                     borderColor: "#4285f4",
-                    backgroundColor: "rgba(66, 133, 244, 0.2)",
-                    tension: 0.3
+                    backgroundColor: "rgba(66, 133, 244, 0.08)",
+                    tension: 0.3,
+                    fill: false
                 }
             ]
         },
@@ -43,15 +45,39 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
             responsive: true,
             maintainAspectRatio: false,
             animation: false,
+
+            elements: {
+                line: {
+                    borderWidth: 1.5
+                },
+                point: {
+                    radius: 0,
+                    hoverRadius: 4,
+                    hitRadius: 8
+                }
+            },
+
             scales: {
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
                         text: "KW"
+                    },
+                    grid: {
+                        color: "#eee"
+                    }
+                },
+            },
+
+            plugins: {
+                legend: {
+                    labels: {
+                        boxWidth: 12,
+                        boxHeight: 12
                     }
                 }
-            }
+            },
         }
     });
 
