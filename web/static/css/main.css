@@ -178,6 +178,7 @@ body {
 
   padding: 12px 16px;
   min-height: 72px;
+  position: relative;
 }
 
 .header-left,
@@ -194,19 +195,17 @@ body {
 }
 
 .today-page .header-left .day {
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #222;
+  font-size: 1.2rem;
 }
 .today-page .header-left .date {
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #222;
+  font-size: 1rem;
 }
 
 .header-right {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 12px;
 }
 
 .today-page .header-right .time {
@@ -245,6 +244,33 @@ body {
 .today-page .consumption {
   border: 4px solid #f4b400;
 }
+
+.today-page .header {
+  min-height: unset;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.header-logo {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(100% - 8px);   
+  width: auto;
+  aspect-ratio: auto;
+
+  max-height: 5rem;
+  min-height: 2.2rem;
+
+  pointer-events: none;
+}
+
+.today-page .header-logo {
+  height: calc(100% - 12px);
+  max-height: 6.2rem;
+}
+
 
 @media (max-width: 900px) {
   .dashboard {
@@ -286,27 +312,87 @@ body {
   .small-charts > div:first-of-type {
     grid-column: auto;
   }
-
+  
   .today-page .header {
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    min-height: auto;
   }
 
   .today-page .header-left {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
     justify-content: center;
-  }
-  .today-page .header-right {
-    width: 100%;
-    text-align: right;
-    justify-content: center;
+
+    gap: 0;                 
   }
 
+  .today-page .header-left .day {
+    font-size: 1.2rem;      
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .today-page .header-left .date {
+    font-size: 0.9rem;      
+    color: #777;
+    line-height: 1.2;
+  }
+
+  .today-page .header-right {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .today-page .header-right .time {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  
   .today-page .box.chart-box {
     flex: none;
     max-height: 320px;
     min-height: 240px;
   }
+
+  .today-page .header .header-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+
+  .today-page .header .header-left .day {
+    display: block !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+  }
+
+  .today-page .header .header-left .date {
+    display: block !important;
+    font-size: 0.9rem !important;
+    color: #777 !important;
+    line-height: 1.2 !important;
+  }
+  
+  .header-logo {
+    height: 1.6em;
+    right: 10px;
+  }
+
+  .today-page .header-logo {
+    height: 3rem;
+    max-height: 3.4rem;
+  }
+
 }
 
 @media (min-width: 1600px) {
@@ -329,13 +415,22 @@ body {
 
   .today-page .header-left .day {
     font-size: 2.8rem;
+    font-weight: 700;
+    color: #222;
   }
 
   .today-page .header-left .date {
     font-size: 2.8rem;
+    font-weight: 700;
+    color: #222;
   }
 
   .today-page .header-right .time {
     font-size: 3.6rem;
   }
+
+  .header-logo {
+    height: 3.2rem;
+  }
+
 }

@@ -27,9 +27,9 @@ function createLineChart(canvasId, jsonId, labelPrefix) {
                     label: `Produzione`,
                     data: data.production,
                     borderColor: "#34a853",
-                    backgroundColor: "rgba(52, 168, 83, 1)",
+                    backgroundColor: "rgba(52, 168, 83, 0.08)",
                     tension: 0.3,
-                    fill: false
+                    fill: true
                 },
                 {
                     label: `Consumo`,

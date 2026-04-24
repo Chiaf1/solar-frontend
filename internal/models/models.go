@@ -31,10 +31,12 @@ var Giorni = []string{
 	"Martedì",
 	"Mercoledì",
 	"Giovedì",
+	"Venerdì",
 	"Sabato",
 }
 
 var Mesi = []string{
+	"",
 	"Gennaio",
 	"Febbraio",
 	"Marzo",
