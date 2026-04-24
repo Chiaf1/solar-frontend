@@ -1,15 +1,28 @@
 package main
 
 import (
+	"context"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/chiaf1/solar-frontend/internal/handlers"
 	"github.com/chiaf1/solar-frontend/internal/repositories"
 	"github.com/chiaf1/solar-frontend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
-const baseURL = "http://192.168.0.171:8080"
+const defaultURL = "http://192.168.0.171:8080"
 
 func main() {
+	// Get base url from env
+	baseURL := os.Getenv("API_BASE_URL")
+	if baseURL == "" {
+		baseURL = defaultURL
+	}
 
 	// Creating the repository, service and handler layers to retrive the API data
 	repo := repositories.NewEnergyAPIRepository(baseURL)
@@ -43,5 +56,34 @@ func main() {
 	handler.RegisterPartialRoutes(r)
 	handler.RegisterApiRoutes(r)
 
-	r.Run(":8080")
+	// Creating an HTTP server to handle graceful shutdowns
+	srv := http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
+
+	// Starting the server in a go routine
+	go func() {
+		log.Println("Server listening on :8080")
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Listen error: %v", err)
+		}
+	}()
+
+	//Waiting for shutdown signal
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	log.Println("Shutdown signal received")
+
+	// Graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server shutdown failed: %v", err)
+	}
+
+	log.Println("Server exited cleanly")
 }
