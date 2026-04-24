@@ -25,34 +25,7 @@ func NewEnergyAPIRepository(baseURL string) *EnergyAPIRepository {
 
 // Retrive today chart data from api
 func (r *EnergyAPIRepository) GetToday() (models.ChartData, error) {
-	url := fmt.Sprintf("%s/energy/today", r.baseURL)
-
-	// 1. Create the request
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return models.ChartData{}, err
-	}
-
-	// 2. Execute the request
-	resp, err := r.client.Do(req)
-	if err != nil {
-		return models.ChartData{}, err
-	}
-	defer resp.Body.Close()
-
-	// 3. Check status code
-	if resp.StatusCode != http.StatusOK {
-		return models.ChartData{}, fmt.Errorf("API returned status %d", resp.StatusCode)
-	}
-
-	// 4. Decode JSON
-	var apiResp []EnergyAPIPoint
-	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
-		return models.ChartData{}, err
-	}
-
-	// 5. Mapping to ChartData
-	return mapAPIResponseToChartData(apiResp), err
+	return r.GetTodayDaily()
 }
 
 // Retrive yesterday chart data from api
@@ -62,25 +35,25 @@ func (r *EnergyAPIRepository) GetYesterday() (models.ChartData, error) {
 	// 1. Create the request
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return models.ChartData{}, err
+		return emptyDailyChart(10 * time.Minute), err
 	}
 
 	// 2. Execute the request
 	resp, err := r.client.Do(req)
 	if err != nil {
-		return models.ChartData{}, err
+		return emptyDailyChart(10 * time.Minute), err
 	}
 	defer resp.Body.Close()
 
 	// 3. Check status code
 	if resp.StatusCode != http.StatusOK {
-		return models.ChartData{}, fmt.Errorf("API returned status %d", resp.StatusCode)
+		return emptyDailyChart(10 * time.Minute), fmt.Errorf("API returned status %d", resp.StatusCode)
 	}
 
 	// 4. Decode JSON
 	var apiResp []EnergyAPIPoint
 	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
-		return models.ChartData{}, err
+		return emptyDailyChart(10 * time.Minute), err
 	}
 
 	// 5. Mapping to ChartData
@@ -166,129 +139,71 @@ func (r *EnergyAPIRepository) GetKPI() (models.KPIData, error) {
 	return models.KPIData{}, nil
 }
 
-// Convert EnergyAPIPoint slice into chartdata
-func mapAPIResponseToChartData(apiResp []EnergyAPIPoint) models.ChartData {
+// Retrive today chart data from api with today endpoint
+func (r *EnergyAPIRepository) getTodayOg() (models.ChartData, error) {
+	url := fmt.Sprintf("%s/energy/today", r.baseURL)
+
+	// 1. Create the request
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return emptyDailyChart(10 * time.Minute), err
+	}
+
+	// 2. Execute the request
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return emptyDailyChart(10 * time.Minute), err
+	}
+	defer resp.Body.Close()
+
+	// 3. Check status code
+	if resp.StatusCode != http.StatusOK {
+		return emptyDailyChart(10 * time.Minute), fmt.Errorf("API returned status %d", resp.StatusCode)
+	}
+
+	// 4. Decode JSON
+	var apiResp []EnergyAPIPoint
+	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+		return emptyDailyChart(10 * time.Minute), err
+	}
+
+	// 5. Mapping to ChartData
+	return mapAPIResponseToChartData(apiResp), err
+}
+
+// Retrive today chart data from api with daily endpoint
+func (r *EnergyAPIRepository) GetTodayDaily() (models.ChartData, error) {
+	window := "4m"
 	loc, _ := time.LoadLocation("Europe/Rome")
+	now := time.Now().In(loc)
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, loc)
+	todayStr := today.Format("2006-01-02")
+	url := fmt.Sprintf("%s/energy/daily?from=%s&to=%s&window=%s", r.baseURL, todayStr, todayStr, window)
 
-	step := detectStep(apiResp, 5*time.Minute, loc)
-
-	timeline := buildDailyTimeline(step, loc)
-	index := indexAPIPoints(apiResp, step, loc)
-
-	labels := make([]string, 0, len(timeline))
-	production := make([]*float64, 0, len(timeline))
-	consumption := make([]*float64, 0, len(timeline))
-
-	for _, t := range timeline {
-		labels = append(labels, t.Format("15:04"))
-
-		if point, ok := index[t]; ok {
-			production = append(production, &point.Production)
-			consumption = append(consumption, &point.Consumption)
-		} else {
-			production = append(production, nil)
-			consumption = append(consumption, nil)
-		}
-
+	// 1. Create the request
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return emptyDailyChart(10 * time.Minute), err
 	}
 
-	return models.ChartData{
-		Labels:      labels,
-		Production:  production,
-		Consumption: consumption,
+	// 2. Execute the request
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return emptyDailyChart(10 * time.Minute), err
 	}
-}
+	defer resp.Body.Close()
 
-// Build daily timeline returns the labels for a comlpete day with a set step
-func buildDailyTimeline(step time.Duration, loc *time.Location) []time.Time {
-	start := time.Date(0, 1, 1, 0, 0, 0, 0, loc)
-	end := start.Add(24 * time.Hour)
-
-	var timeline []time.Time
-	for t := start; !t.After(end); t = t.Add(step) {
-		timeline = append(timeline, t)
-	}
-	return timeline
-}
-
-// Creates a map for all energy points with the time stamp as key
-func indexAPIPoints(apiPoints []EnergyAPIPoint, step time.Duration, loc *time.Location) map[time.Time]EnergyAPIPoint {
-	index := make(map[time.Time]EnergyAPIPoint)
-
-	for _, p := range apiPoints {
-		t, err := time.Parse(time.RFC3339, p.Time)
-		if err != nil {
-			continue
-		}
-
-		bucket := normalizeToBacket(t, step, loc)
-		index[bucket] = p
-	}
-	return index
-}
-
-// Detect step duration in a slice of EnergyAPIPoint
-func detectStep(apiResp []EnergyAPIPoint, fallback time.Duration, loc *time.Location) time.Duration {
-	if len(apiResp) < 2 {
-		return fallback
+	// 3. Check status code
+	if resp.StatusCode != http.StatusOK {
+		return emptyDailyChart(10 * time.Minute), fmt.Errorf("API returned status %d", resp.StatusCode)
 	}
 
-	t1, err1 := time.Parse(time.RFC3339, apiResp[0].Time)
-	t2, err2 := time.Parse(time.RFC3339, apiResp[1].Time)
-
-	if err1 != nil || err2 != nil {
-		return fallback
+	// 4. Decode JSON
+	var apiResp []EnergyAPIDaily
+	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+		return emptyDailyChart(10 * time.Minute), err
 	}
 
-	// Conv to local time before step calculation
-	t1 = t1.In(loc)
-	t2 = t2.In(loc)
-
-	step := t2.Sub(t1)
-
-	// Check step value
-	if step <= 0 || step > time.Hour {
-		return fallback
-	}
-
-	return step
-}
-
-// Normalize timestamp to time stamp starting from midnight with fixed step
-func normalizeToBacket(ts time.Time, step time.Duration, loc *time.Location) time.Time {
-	local := ts.In(loc)
-
-	// Midnight in local time of the smae day
-	startOfDay := time.Date(0, 1, 1, 0, 0, 0, 0, loc)
-
-	elapsed := time.Duration(local.Hour())*time.Hour +
-		time.Duration(local.Minute())*time.Minute +
-		time.Duration(local.Second())*time.Second +
-		time.Duration(local.Nanosecond())
-
-	bucketIndex := elapsed / step
-
-	return startOfDay.Add(bucketIndex * step)
-}
-
-// Helper function returns empty chart data
-func emptyDailyChart(step time.Duration) models.ChartData {
-	loc, _ := time.LoadLocation("Europe/Rome")
-	timeline := buildDailyTimeline(step, loc)
-
-	labels := make([]string, 0, len(timeline))
-	production := make([]*float64, 0, len(timeline))
-	consumption := make([]*float64, 0, len(timeline))
-
-	for _, t := range timeline {
-		labels = append(labels, t.Format("15:04"))
-		production = append(production, nil)
-		consumption = append(consumption, nil)
-	}
-
-	return models.ChartData{
-		Labels:      labels,
-		Production:  production,
-		Consumption: consumption,
-	}
+	// 5. Mapping to ChartData
+	return mapAPIResponseToChartData(apiResp[0].Points), err
 }
