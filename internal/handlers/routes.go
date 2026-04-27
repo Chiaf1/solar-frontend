@@ -13,6 +13,7 @@ func (h *Handler) RegisterPageRoutes(r *gin.Engine) {
 func (h *Handler) RegisterApiRoutes(r *gin.Engine) {
 	r.GET("/api/refresh-today", h.RefreshToday)
 	r.GET("/api/refresh-history", h.RefreshHistory)
+	r.GET("/api/temperature", h.TemperaturePartial)
 }
 
 // Register all partials routes

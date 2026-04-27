@@ -9,11 +9,16 @@ import (
 )
 
 type ChartService struct {
-	repo repositories.EnergyRepository
+	energyRepo  repositories.EnergyRepository
+	weatherRepo repositories.WeatherRepository
 
-	mu         sync.Mutex
-	todayCache *cacheToday
-	cacheTTL   time.Duration
+	todayMu       sync.Mutex
+	todayCache    *cacheToday
+	todayCacheTTL time.Duration
+
+	weatherMu       sync.Mutex
+	weatherCache    *cacheWeather
+	weatherCacheTTL time.Duration
 }
 
 type cacheToday struct {
@@ -21,25 +26,32 @@ type cacheToday struct {
 	timestamp time.Time
 }
 
-func NewChartService(repo repositories.EnergyRepository) *ChartService {
+type cacheWeather struct {
+	temperature float64
+	timestamp   time.Time
+}
+
+func NewChartService(energyRepo repositories.EnergyRepository, weatherRepo repositories.WeatherRepository) *ChartService {
 	return &ChartService{
-		repo:     repo,
-		cacheTTL: 30 * time.Second,
+		energyRepo:      energyRepo,
+		weatherRepo:     weatherRepo,
+		todayCacheTTL:   30 * time.Second,
+		weatherCacheTTL: 10 * time.Minute,
 	}
 }
 
 // Returns chart data for today's chart with cached data
 func (s *ChartService) GetTodayChart() (models.ChartData, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.todayMu.Lock()
+	defer s.todayMu.Unlock()
 
 	// use cache data if valid
-	if s.todayCache != nil && time.Since(s.todayCache.timestamp) < s.cacheTTL {
+	if s.todayCache != nil && time.Since(s.todayCache.timestamp) < s.todayCacheTTL {
 		return s.todayCache.data, nil
 	}
 
 	// if not I call the API
-	data, err := s.repo.GetToday()
+	data, err := s.energyRepo.GetToday()
 	if err != nil {
 		// Fallback: if I have old cahce I use that
 		if s.todayCache != nil {
@@ -59,7 +71,7 @@ func (s *ChartService) GetTodayChart() (models.ChartData, error) {
 
 // Returns chart data for history's charts
 func (s *ChartService) GetHistoryCharts() (map[string]models.ChartData, error) {
-	data, err := s.repo.GetHistory()
+	data, err := s.energyRepo.GetHistory()
 	if err != nil {
 		return nil, err
 	}

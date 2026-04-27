@@ -15,18 +15,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const defaultURL = "http://192.168.0.171:8080"
+const defaultEnergyURL = "http://192.168.0.171:8080"
+const defaultWeatherURL = "https://api.open-meteo.com/v1/forecast"
 
 func main() {
 	// Get base url from env
-	baseURL := os.Getenv("API_BASE_URL")
-	if baseURL == "" {
-		baseURL = defaultURL
+	energyURL := os.Getenv("ENERGY_BASE_URL")
+	if energyURL == "" {
+		energyURL = defaultEnergyURL
+	}
+	weatherURL := os.Getenv("WATHER_BASE_URL")
+	if weatherURL == "" {
+		weatherURL = defaultWeatherURL
 	}
 
 	// Creating the repository, service and handler layers to retrive the API data
-	repo := repositories.NewEnergyAPIRepository(baseURL)
-	service := services.NewChartService(repo)
+	energyRepo := repositories.NewEnergyAPIRepository(energyURL)
+	weatherRepo := repositories.NewOpenMeteoRepository(weatherURL)
+	service := services.NewChartService(energyRepo, weatherRepo)
 	handler := handlers.NewHandler(service)
 
 	// Creazione router gin

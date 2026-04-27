@@ -111,7 +111,7 @@ body {
 }
 
 .consumption {
-  border-left: 4px solid #f4b400;
+  border-left: 4px solid #f48a00;
 }
 
 .kpi-label {
@@ -242,7 +242,7 @@ body {
 }
 
 .today-page .consumption {
-  border: 4px solid #f4b400;
+  border: 4px solid #f48a00;
 }
 
 .today-page .header {

@@ -23,6 +23,7 @@ func (h *Handler) DashboardPage(ctx *gin.Context) {
 	for k := range historyCharts {
 		historyChartsJSON[k], _ = json.Marshal(historyCharts[k])
 	}
+	temperature, _ := h.service.GetTemperature()
 
 	ctx.HTML(http.StatusOK, "dashboard.html", gin.H{
 		// Dati per grafici
@@ -35,9 +36,10 @@ func (h *Handler) DashboardPage(ctx *gin.Context) {
 		"ChartMinus6JSON":    template.JS(historyChartsJSON["chart-minus-6"]),
 
 		// Data e ora
-		"DayName":  dateAndTime.DayName,
-		"FullDate": dateAndTime.Date,
-		"Time":     dateAndTime.Time,
+		"DayName":     dateAndTime.DayName,
+		"FullDate":    dateAndTime.Date,
+		"Time":        dateAndTime.Time,
+		"Temperature": temperature,
 
 		// KPI
 		"ProductionValue":  kpis.ProductionValue,
@@ -54,15 +56,17 @@ func (h *Handler) TodayPage(ctx *gin.Context) {
 	// Starting data
 	todayChart, _ := h.service.GetTodayChart()
 	kpis, _ := h.service.GetKPI()
+	temperature, _ := h.service.GetTemperature()
 
 	// Json conversion
 	todayJSON, _ := json.Marshal(todayChart)
 
 	ctx.HTML(http.StatusOK, "today_page.html", gin.H{
 		// Data e ora
-		"DayName":  dateAndTime.DayName,
-		"FullDate": dateAndTime.Date,
-		"Time":     dateAndTime.Time,
+		"DayName":     dateAndTime.DayName,
+		"FullDate":    dateAndTime.Date,
+		"Time":        dateAndTime.Time,
+		"Temperature": temperature,
 
 		// KPI
 		"ProductionValue":  kpis.ProductionValue,
