@@ -271,6 +271,26 @@ body {
   max-height: 6.2rem;
 }
 
+.temperature {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #555;
+
+  white-space: nowrap;
+}
+
+.today-page .temperature {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.5px;
+}
 
 @media (max-width: 900px) {
   .dashboard {
@@ -393,6 +413,21 @@ body {
     max-height: 3.4rem;
   }
 
+  body:not(.today-page) .temperature {
+    position: static;
+    transform: none;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .today-page .temperature {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
 }
 
 @media (min-width: 1600px) {
@@ -422,6 +457,13 @@ body {
   .today-page .header-left .date {
     font-size: 2.8rem;
     font-weight: 700;
+    color: #222;
+  }
+
+  .today-page .temperature {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
     color: #222;
   }
 
